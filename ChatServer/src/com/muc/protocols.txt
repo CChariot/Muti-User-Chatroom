@@ -13,3 +13,8 @@ User & Server
 
 Commands:
     login <user> <password>
+    logoff
+
+    msg<user> text....
+    i.e "msg Ben Hello"<-- sent
+    Ben: "msg guest Hello"<-- received

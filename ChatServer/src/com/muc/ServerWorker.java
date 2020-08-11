@@ -13,7 +13,7 @@ public class ServerWorker extends Thread{
     private String login = null;
     private OutputStream outputStream;
 
-    public ServerWorker(Server server, Socket clientSocket){
+    ServerWorker(Server server, Socket clientSocket){
         this.server = server;
         this.clientSocket = clientSocket;
     }
@@ -42,6 +42,9 @@ public class ServerWorker extends Thread{
                         break;
                     }else if("login".equalsIgnoreCase(cmd)){
                         handleLogin(outputStream, tokens);
+                    }else if("msg".equalsIgnoreCase(cmd)){
+                        String[] tokensMsg = StringUtils.split(line, null, 3);
+                        handleMessage(tokensMsg);
                     }
                     else{
                         String msg = "unknown " + cmd + "\n";
@@ -50,6 +53,20 @@ public class ServerWorker extends Thread{
                 }
         }
         clientSocket.close();//close out the connection
+    }
+    // format: "msg" "login" msg....
+    private void handleMessage(String[] tokens) throws IOException {
+        String sendTo = tokens[1];
+        String body = tokens[2];
+
+        List<ServerWorker> workerList = server.getWorkerList();
+        for(ServerWorker worker : workerList){
+            if (sendTo.equalsIgnoreCase(worker.getLogin())){
+                String outMsg = "msg " + login + " " + body + "\n";
+                worker.send(outMsg);
+            }
+        }
+
     }
 
     private void handleLogoff() throws IOException {
@@ -65,7 +82,7 @@ public class ServerWorker extends Thread{
         clientSocket.close();//close out the connection
     }
 
-    public String getLogin(){
+    private String getLogin(){
         return login;
     }
     private void handleLogin(OutputStream outputStream, String[] tokens) throws IOException {
