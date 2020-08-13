@@ -135,13 +135,13 @@ public class ServerWorker extends Thread{
                 for(ServerWorker worker : workerList){
                         if(worker.getLogin() != null) {
                             if( !login.equals(worker.getLogin())) {
-                                String msg2 = "online " + worker.getLogin();
+                                String msg2 = " online " + worker.getLogin();
                                 send(msg2);
                             }
                         }
                     }
                 //send other users current status
-                String onlineMsg = "online " + login + "\n";
+                String onlineMsg = " online " + login + "\n";
                 for(ServerWorker worker : workerList){
                     if( !login.equals(worker.getLogin())) {
                         worker.send(onlineMsg);
