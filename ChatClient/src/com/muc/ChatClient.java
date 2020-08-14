@@ -84,7 +84,7 @@ public class ChatClient {
         serverOut.write(cmd.getBytes());
     }
 
-    private void startMessageReader() {
+    public void startMessageReader() {
         Thread t = new Thread(){
             @Override
             public void run(){
@@ -94,7 +94,7 @@ public class ChatClient {
         t.start();
     }
 
-    private void readMessageLoop() {
+    public void readMessageLoop() {
         try {
             String line;
             while((line = bufferedIn.readLine()) != null){
@@ -122,7 +122,7 @@ public class ChatClient {
         }
     }
 
-    private void handleMessage(String[] tokensMsg) {
+    public void handleMessage(String[] tokensMsg) {
         String login = tokensMsg[1];
         String msgBody = tokensMsg[2];
 
@@ -131,14 +131,14 @@ public class ChatClient {
         }
     }
 
-    private void handleOffline(String[] tokens) {
+    public void handleOffline(String[] tokens) {
         String login = tokens[1];
         for(UserStatusListener listener : userStatusListeners){
             listener.offline(login);
         }
     }
 
-    private void handleOnline(String[] tokens) {
+    public void handleOnline(String[] tokens) {
         String login = tokens[1];
         for(UserStatusListener listener : userStatusListeners){
             listener.online(login);
